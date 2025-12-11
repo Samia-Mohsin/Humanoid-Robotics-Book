@@ -45,27 +45,35 @@ app.include_router(quizzes.router, prefix="/api", tags=["quizzes"])
 # Define the frontend build directory
 frontend_build_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "build")
 
-# Mount static assets if the build directory exists
-if os.path.exists(frontend_build_dir):
-    # Mount the assets directory (CSS, JS, images)
-    assets_path = os.path.join(frontend_build_dir, "assets")
-    if os.path.exists(assets_path):
-        app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
+# Check if running in Vercel environment
+import os
+is_vercel = os.environ.get("VERCEL", False)
 
-    # Mount other static directories that might exist
-    for subdir in ["img", "js", "css", "static"]:
-        subdir_path = os.path.join(frontend_build_dir, subdir)
-        if os.path.exists(subdir_path):
-            app.mount(f"/{subdir}", StaticFiles(directory=subdir_path), name=subdir)
+if not is_vercel:
+    # Mount static assets if the build directory exists (for local deployment)
+    if os.path.exists(frontend_build_dir):
+        # Mount the assets directory (CSS, JS, images)
+        assets_path = os.path.join(frontend_build_dir, "assets")
+        if os.path.exists(assets_path):
+            app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
+
+        # Mount other static directories that might exist
+        for subdir in ["img", "js", "css", "static"]:
+            subdir_path = os.path.join(frontend_build_dir, subdir)
+            if os.path.exists(subdir_path):
+                app.mount(f"/{subdir}", StaticFiles(directory=subdir_path), name=subdir)
+    else:
+        print("Warning: Frontend build directory does not exist. Run 'npm run build' in the frontend directory to build the frontend.")
 else:
-    print("Warning: Frontend build directory does not exist. Run 'npm run build' in the frontend directory to build the frontend.")
+    print("Running in Vercel environment - skipping static file mounts")
 
 @app.get("/")
 async def root():
-    if os.path.exists(frontend_build_dir):
+    if not is_vercel and os.path.exists(frontend_build_dir):
         return FileResponse(os.path.join(frontend_build_dir, "index.html"))
     else:
-        return {"message": "Physical AI & Humanoid Robotics Educational Platform API - Frontend not built yet"}
+        # In Vercel, return a simple message or redirect to API docs
+        return {"message": "Physical AI & Humanoid Robotics Educational Platform API is running", "api_docs": "/docs", "status": "healthy"}
 
 @app.get("/health")
 async def health_check():
@@ -85,6 +93,13 @@ async def serve_frontend(full_path: str):
         return JSONResponse(
             status_code=404,
             content={"detail": "API route not found"}
+        )
+
+    # In Vercel environment, don't try to serve frontend files
+    if is_vercel:
+        return JSONResponse(
+            status_code=404,
+            content={"detail": "Frontend not available in this environment. See API documentation at /docs"}
         )
 
     # Check if it's a static file in the build directory
