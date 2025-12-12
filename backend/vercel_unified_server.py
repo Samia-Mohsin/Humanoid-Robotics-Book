@@ -1,3 +1,6 @@
+"""
+Vercel-compatible unified server that avoids problematic imports
+"""
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
@@ -7,49 +10,10 @@ from pathlib import Path
 import os
 import uvicorn
 
-# Import the API routers from the existing app
-try:
-    from app.routers import query, auth, personalize, translate, quizzes
-except ImportError as e:
-    print(f"Error importing routers: {e}")
-    import sys
-    import os
-    # Add the current directory to path to resolve imports
-    sys.path.insert(0, os.path.dirname(__file__))
-    try:
-        from app.routers import query, auth, personalize, translate, quizzes
-    except ImportError as e2:
-        print(f"Second attempt to import routers failed: {e2}")
-        # Create mock routers as fallback
-        from fastapi import APIRouter
-        query = APIRouter()
-        auth = APIRouter()
-        personalize = APIRouter()
-        translate = APIRouter()
-        quizzes = APIRouter()
+# Check if running in Vercel environment early
+is_vercel = os.environ.get("VERCEL", False)
 
-        # Add a simple route to each to avoid errors
-        @query.get("/")
-        def query_root():
-            return {"status": "Query service unavailable"}
-
-        @auth.get("/")
-        def auth_root():
-            return {"status": "Auth service unavailable"}
-
-        @personalize.get("/")
-        def personalize_root():
-            return {"status": "Personalize service unavailable"}
-
-        @translate.get("/")
-        def translate_root():
-            return {"status": "Translate service unavailable"}
-
-        @quizzes.get("/")
-        def quizzes_root():
-            return {"status": "Quizzes service unavailable"}
-
-# Create the main FastAPI app
+# Create the main FastAPI app with error handling for router imports
 app = FastAPI(
     title="Physical AI & Humanoid Robotics Educational Platform API",
     description="Unified server for the educational platform with RAG chatbot, authentication, personalization, and translation features",
@@ -67,39 +31,69 @@ app.add_middleware(
     expose_headers=["Access-Control-Allow-Origin"]
 )
 
-# Include the existing API routers - only if they have a router attribute
+# Import and include the API routers with comprehensive error handling
 try:
-    app.include_router(query.router, prefix="/api", tags=["query"])
-except AttributeError:
-    # If query is a router instance itself (fallback), add it directly
-    app.include_router(query, prefix="/api", tags=["query"])
+    from app.routers import query, auth, personalize, translate, quizzes
 
-try:
-    app.include_router(auth.router, prefix="/api", tags=["auth"])
-except AttributeError:
-    app.include_router(auth, prefix="/api", tags=["auth"])
+    # Include the existing API routers - only if they have a router attribute
+    try:
+        app.include_router(query.router, prefix="/api", tags=["query"])
+    except AttributeError:
+        # If query is a router instance itself, add it directly
+        app.include_router(query, prefix="/api", tags=["query"])
 
-try:
-    app.include_router(personalize.router, prefix="/api", tags=["personalize"])
-except AttributeError:
-    app.include_router(personalize, prefix="/api", tags=["personalize"])
+    try:
+        app.include_router(auth.router, prefix="/api", tags=["auth"])
+    except AttributeError:
+        app.include_router(auth, prefix="/api", tags=["auth"])
 
-try:
-    app.include_router(translate.router, prefix="/api", tags=["translate"])
-except AttributeError:
-    app.include_router(translate, prefix="/api", tags=["translate"])
+    try:
+        app.include_router(personalize.router, prefix="/api", tags=["personalize"])
+    except AttributeError:
+        app.include_router(personalize, prefix="/api", tags=["personalize"])
 
-try:
-    app.include_router(quizzes.router, prefix="/api", tags=["quizzes"])
-except AttributeError:
-    app.include_router(quizzes, prefix="/api", tags=["quizzes"])
+    try:
+        app.include_router(translate.router, prefix="/api", tags=["translate"])
+    except AttributeError:
+        app.include_router(translate, prefix="/api", tags=["translate"])
+
+    try:
+        app.include_router(quizzes.router, prefix="/api", tags=["quizzes"])
+    except AttributeError:
+        app.include_router(quizzes, prefix="/api", tags=["quizzes"])
+
+except ImportError as e:
+    print(f"Router import error (expected in Vercel): {e}")
+    print("Creating fallback API routes...")
+
+    # Create fallback routes in case the actual routers can't be imported
+    @app.get("/api/query")
+    @app.post("/api/query")
+    async def query_fallback():
+        return {"status": "error", "message": "Query service not available in this environment"}
+
+    @app.get("/api/auth")
+    @app.post("/api/auth")
+    async def auth_fallback():
+        return {"status": "error", "message": "Auth service not available in this environment"}
+
+    @app.get("/api/personalize")
+    @app.post("/api/personalize")
+    async def personalize_fallback():
+        return {"status": "error", "message": "Personalize service not available in this environment"}
+
+    @app.get("/api/translate")
+    @app.post("/api/translate")
+    async def translate_fallback():
+        return {"status": "error", "message": "Translate service not available in this environment"}
+
+    @app.get("/api/quizzes")
+    @app.post("/api/quizzes")
+    async def quizzes_fallback():
+        return {"status": "error", "message": "Quizzes service not available in this environment"}
 
 # Define the frontend build directory
 frontend_build_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "build")
-
-# Check if running in Vercel environment
-import os
-is_vercel = os.environ.get("VERCEL", False)
 
 if not is_vercel:
     # Mount static assets if the build directory exists (for local deployment)
@@ -139,12 +133,11 @@ async def api_root():
 # Catch-all route for client-side routing (excluding API routes)
 @app.get("/{full_path:path}")
 async def serve_frontend(full_path: str):
-    # If the path starts with /api/, let the API routers handle it
+    # If the path starts with /api/, return a more specific message
     if full_path.startswith("api/"):
-        # Return a 404 since this shouldn't be caught by this handler
         return JSONResponse(
             status_code=404,
-            content={"detail": "API route not found"}
+            content={"detail": "API route not found or service unavailable"}
         )
 
     # In Vercel environment, don't try to serve frontend files

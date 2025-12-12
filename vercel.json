@@ -2,21 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "api/simple_entry.py",
       "use": "@vercel/python",
       "config": {
-        "runtime": "python3.11"
+        "runtime": "python3.11",
+        "requirements": "vercel-requirements.txt"
       }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/index.py"
+      "dest": "api/simple_entry.py"
     },
     {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "api/simple_entry.py"
     }
   ]
 }
