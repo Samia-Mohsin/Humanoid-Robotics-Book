@@ -149,7 +149,9 @@
       "Bash(python -c \"from main import app; print(''Application loaded successfully'')\")",
       "Bash(git commit -m \"Add frontend Docusaurus documentation site for NeuralReader AI application\n\n- Implement Docusaurus frontend with chatbot component\n- Add user authentication context and chat interface\n- Include UI components for chat bubbles and user interactions\n- Set up proper configuration for the documentation site\n- Integrate with the backend API endpoints\")",
       "Bash(git checkout main)",
-      "Bash(git commit -m \"Fix dependency conflict for Vercel deployment\n\n- Update pydantic version to be compatible with langchain (>=2.7.4,<3.0.0)\n- Update pydantic-settings to compatible version\n- Update openai package version for compatibility\")"
+      "Bash(git commit -m \"Fix dependency conflict for Vercel deployment\n\n- Update pydantic version to be compatible with langchain (>=2.7.4,<3.0.0)\n- Update pydantic-settings to compatible version\n- Update openai package version for compatibility\")",
+      "Bash(git commit -m \"Prepare project for Vercel deployment with strict checking\n\n- Create dedicated Vercel entry point (vercel_api.py) to avoid runtime issues\n- Update Vercel configuration to use proper entry point\n- Ensure all dependencies are properly specified\n- Maintain all NeuralReader AI features (RAG chat, translation, profiles, ingestion)\")",
+      "Bash(git remote remove origin)"
     ],
     "deny": [],
     "ask": []
