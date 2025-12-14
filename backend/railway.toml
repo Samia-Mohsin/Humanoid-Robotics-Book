@@ -1,0 +1,28 @@
+# Railway deployment configuration
+# This file configures how the application is deployed on Railway
+
+# Build configuration
+builder: dockerfile
+dockerfile: Dockerfile
+
+# Environment variables (Railway will prompt for these during deployment)
+variables:
+  - DATABASE_URL
+  - SECRET_KEY
+  - QDRANT_HOST
+  - QDRANT_PORT
+  - QDRANT_API_KEY
+  - OPENAI_API_KEY
+  - OPENAI_MODEL
+  - EMBEDDING_MODEL
+
+# Services to be deployed
+services:
+  - name: neuralreader-api
+    type: web
+    port: 8000
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+
+# Health check
+healthcheck: /api/health

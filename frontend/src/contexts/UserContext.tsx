@@ -4,10 +4,17 @@ interface User {
   id: string;
   email: string;
   name: string;
-  preferences: {
-    language: string;
-    learningPath: string;
-    experienceLevel: string;
+  preferences?: {
+    language?: string;
+    learningPath?: string;
+    experienceLevel?: string;
+    learningStyle?: 'visual' | 'auditory' | 'reading' | 'kinesthetic';
+    accessibilitySettings?: {
+      highContrast?: boolean;
+      fontSize?: 'small' | 'normal' | 'large' | 'xlarge';
+      screenReader?: boolean;
+      reducedMotion?: boolean;
+    };
   };
   progress: {
     [moduleId: string]: {

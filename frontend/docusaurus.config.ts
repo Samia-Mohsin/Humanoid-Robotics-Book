@@ -82,8 +82,19 @@ const config: Config = {
   ],
 
   plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        fromExtensions: ['html'],
+        redirects: [
+          {
+            from: '/docs',
+            to: '/docs/intro',
+          },
+        ],
+      },
+    ],
   ],
-
 
   themeConfig: {
     // Replace with your project's social card
@@ -108,7 +119,7 @@ const config: Config = {
       title: 'Physical AI & Humanoid Robotics',
       logo: {
         alt: 'Physical AI & Humanoid Robotics Logo',
-        src: 'img/logo.jpg',
+        src: 'img/logo.svg',
       },
       items: [
         {
@@ -120,23 +131,6 @@ const config: Config = {
         {
           type: 'localeDropdown',
           position: 'right',
-        },
-        {
-          type: 'dropdown',
-          position: 'right',
-          label: '🌐 Translate',
-          items: [
-            {
-              label: 'English',
-              to: '/?lang=en',
-              className: 'language-switcher-item',
-            },
-            {
-              label: 'اردو',
-              to: '/?lang=ur',
-              className: 'language-switcher-item',
-            }
-          ],
         },
         {
           href: 'https://github.com/humanoid-robotics-book/humanoid-robotics-book',
@@ -211,14 +205,14 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['python', 'bash', 'json', 'yaml', 'docker', 'powershell'],
     },
-    algolia: {
-      // The application ID provided by Algolia
-      appId: 'YOUR_ALGOLIA_APP_ID',
-      // Public API key: it is safe to commit it
-      apiKey: 'YOUR_ALGOLIA_API_KEY',
-      indexName: 'humanoid-robotics-book',
-      contextualSearch: true,
-    },
+    // algolia: {
+    //   // The application ID provided by Algolia
+    //   appId: 'YOUR_ALGOLIA_APP_ID',
+    //   // Public API key: it is safe to commit it
+    //   apiKey: 'YOUR_ALGOLIA_API_KEY',
+    //   indexName: 'humanoid-robotics-book',
+    //   contextualSearch: true,
+    // },
   } satisfies Preset.ThemeConfig,
 };
 

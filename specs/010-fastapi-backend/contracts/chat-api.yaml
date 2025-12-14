@@ -1,0 +1,540 @@
+openapi: 3.0.3
+info:
+  title: Physical AI & Humanoid Robotics Platform API with LangChain RAG
+  description: API for the educational platform with LangChain-based RAG chatbot, translation, and user profile features
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://api.physical-ai-humanoid-robotics.com
+    description: Production server
+
+paths:
+  /api/chat:
+    post:
+      summary: Send a message to the AI chatbot with LangChain RAG
+      description: Send a message to the AI chatbot and receive a response based on the book content using LangChain RAG
+      operationId: sendMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+            examples:
+              basicMessage:
+                summary: Basic message example
+                value:
+                  message: "What is ROS2?"
+                  context: ""
+                  sessionId: "session-123"
+              withContext:
+                summary: Message with context example
+                value:
+                  message: "Explain this concept further"
+                  context: "ROS2 (Robot Operating System 2) is a flexible framework for writing robot applications..."
+                  sessionId: "session-456"
+      responses:
+        '200':
+          description: Successful response from the LangChain-powered chatbot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+              examples:
+                basicResponse:
+                  summary: Basic response example
+                  value:
+                    id: "msg-789"
+                    response: "ROS2 is a flexible framework for writing robot applications..."
+                    timestamp: "2025-12-14T10:30:00Z"
+                    contextUsed: true
+                    sources: ["/docs/chapter1", "/docs/ros2-intro"]
+                    ragContext:
+                      query: "What is ROS2?"
+                      retrievedChunks: 3
+                      relevanceScore: 0.85
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/translate/chapter:
+    post:
+      summary: Translate a chapter to the target language
+      description: Request translation of a book chapter to the specified target language
+      operationId: translateChapter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslateChapterRequest'
+      responses:
+        '200':
+          description: Successfully translated chapter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslateChapterResponse'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Chapter not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/profile/{user_id}:
+    get:
+      summary: Get user profile information
+      description: Retrieve the profile information for a specific user
+      operationId: getUserProfile
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '401':
+          description: Unauthorized - user not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Update user profile information
+      description: Update the profile information for a specific user
+      operationId: updateUserProfile
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserProfileRequest'
+      responses:
+        '200':
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/ingest:
+    post:
+      summary: Re-index book content
+      description: Trigger the ingestion process to re-index book content in the vector database
+      operationId: ingestContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestRequest'
+      responses:
+        '200':
+          description: Content ingestion started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResponse'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user not authenticated (admin required)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: The user's message to the chatbot
+          example: "What is ROS2?"
+        context:
+          type: string
+          description: Additional context, such as selected text
+          example: "I found this concept confusing in the chapter..."
+        sessionId:
+          type: string
+          description: Session identifier for conversation continuity
+          example: "session-123"
+        userId:
+          type: string
+          description: Optional user identifier for authenticated users
+          example: "user-456"
+        chatHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageHistory'
+          description: Previous conversation history for context
+
+    ChatMessageHistory:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [user, assistant]
+          description: Role of the message sender
+        content:
+          type: string
+          description: Content of the message
+          example: "Previous message content"
+
+    ChatResponse:
+      type: object
+      required:
+        - id
+        - response
+        - timestamp
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the response message
+          example: "msg-789"
+        response:
+          type: string
+          description: The chatbot's response to the user
+          example: "ROS2 is a flexible framework for writing robot applications..."
+        timestamp:
+          type: string
+          format: date-time
+          description: When the response was generated
+          example: "2025-12-14T10:30:00Z"
+        contextUsed:
+          type: boolean
+          description: Whether the context was used in generating the response
+          example: true
+        sources:
+          type: array
+          items:
+            type: string
+          description: Sources referenced in the response (for RAG)
+          example: ["/docs/chapter1", "/docs/ros2-intro"]
+        ragContext:
+          type: object
+          description: Information about the RAG process
+          properties:
+            query:
+              type: string
+              description: Original user query
+              example: "What is ROS2?"
+            retrievedChunks:
+              type: integer
+              description: Number of document chunks retrieved
+              example: 3
+            relevanceScore:
+              type: number
+              description: Average relevance score of retrieved chunks
+              example: 0.85
+            processedAt:
+              type: string
+              format: date-time
+              description: When the RAG processing was completed
+
+    TranslateChapterRequest:
+      type: object
+      required:
+        - chapterId
+        - targetLanguage
+      properties:
+        chapterId:
+          type: string
+          description: The ID of the chapter to translate
+          example: "chapter-ros2-intro"
+        targetLanguage:
+          type: string
+          description: The target language code (e.g., 'ur' for Urdu)
+          example: "ur"
+        userId:
+          type: string
+          description: Optional user identifier for tracking
+          example: "user-456"
+        preserveFormat:
+          type: boolean
+          description: Whether to preserve the original formatting
+          default: true
+
+    TranslateChapterResponse:
+      type: object
+      required:
+        - chapterId
+        - translatedContent
+        - targetLanguage
+      properties:
+        chapterId:
+          type: string
+          description: The ID of the chapter
+          example: "chapter-ros2-intro"
+        translatedContent:
+          type: string
+          description: The translated version of the chapter content
+          example: "# Urdu Translation of ROS2 Introduction..."
+        targetLanguage:
+          type: string
+          description: The target language code
+          example: "ur"
+        metadata:
+          type: object
+          description: Additional metadata about the translation
+          properties:
+            processingTime:
+              type: number
+              description: Time taken to process the translation (in ms)
+              example: 2100
+            wordCount:
+              type: number
+              description: Number of words in the translation
+              example: 1200
+
+    UserProfileResponse:
+      type: object
+      required:
+        - user_id
+        - email
+        - name
+        - preferences
+      properties:
+        user_id:
+          type: string
+          description: The user's unique identifier
+          example: "user-456"
+        email:
+          type: string
+          description: The user's email address
+          example: "user@example.com"
+        name:
+          type: string
+          description: The user's display name
+          example: "John Doe"
+        preferences:
+          type: object
+          description: User-specific settings and preferences
+          properties:
+            learning_style:
+              type: string
+              enum: [visual, auditory, reading, kinesthetic]
+              description: The user's preferred learning style
+              example: "visual"
+            language_preferences:
+              type: array
+              items:
+                type: string
+              description: Preferred languages for content
+              example: ["en", "ur"]
+            accessibility_settings:
+              type: object
+              description: Accessibility preferences
+              properties:
+                high_contrast:
+                  type: boolean
+                  description: Whether to use high contrast mode
+                  example: false
+                font_size:
+                  type: string
+                  enum: [small, normal, large, xlarge]
+                  description: Preferred font size
+                  example: "normal"
+                screen_reader:
+                  type: boolean
+                  description: Whether screen reader is enabled
+                  example: false
+                reduced_motion:
+                  type: boolean
+                  description: Whether to reduce animations
+                  example: true
+        created_at:
+          type: string
+          format: date-time
+          description: When the profile was created
+          example: "2025-12-14T08:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: When the profile was last updated
+          example: "2025-12-14T09:30:00Z"
+
+    UpdateUserProfileRequest:
+      type: object
+      properties:
+        preferences:
+          type: object
+          description: User-specific settings and preferences to update
+          properties:
+            learning_style:
+              type: string
+              enum: [visual, auditory, reading, kinesthetic]
+              description: The user's preferred learning style
+            language_preferences:
+              type: array
+              items:
+                type of: string
+              description: Preferred languages for content
+            accessibility_settings:
+              type: object
+              description: Accessibility preferences
+
+    IngestRequest:
+      type: object
+      properties:
+        source:
+          type: string
+          description: Source of the content to ingest (file path, URL, etc.)
+          example: "/path/to/book/content"
+        force_reindex:
+          type: boolean
+          description: Whether to force re-indexing even if content exists
+          default: false
+        options:
+          type: object
+          description: Additional options for the ingestion process
+          properties:
+            chunk_size:
+              type: integer
+              description: Size of content chunks for vectorization
+              default: 1000
+            overlap:
+              type: integer
+              description: Overlap between chunks
+              default: 200
+            k_chunks:
+              type: integer
+              description: Number of chunks to retrieve for RAG (k parameter)
+              default: 6
+
+    IngestResponse:
+      type: object
+      required:
+        - jobId
+        - status
+        - message
+      properties:
+        jobId:
+          type: string
+          description: Unique identifier for the ingestion job
+          example: "ingest-job-789"
+        status:
+          type: string
+          description: Current status of the ingestion process
+          example: "started"
+        message:
+          type: string
+          description: Human-readable status message
+          example: "Ingestion process started successfully"
+        estimated_completion:
+          type: string
+          format: date-time
+          description: Estimated time of completion
+          example: "2025-12-14T11:00:00Z"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: "BAD_REQUEST"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Invalid input parameters"
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true

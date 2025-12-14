@@ -1,0 +1,447 @@
+openapi: 3.0.3
+info:
+  title: Chat API for Physical AI & Humanoid Robotics Educational Platform
+  description: API for chatbot functionality with RAG capabilities
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://api.physical-ai-humanoid-robotics.com
+    description: Production server
+
+paths:
+  /api/chat:
+    post:
+      summary: Send a message to the chatbot
+      description: Send a message to the AI chatbot and receive a response
+      operationId: sendMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+            examples:
+              basicMessage:
+                summary: Basic message example
+                value:
+                  message: "What is ROS2?"
+                  context: "I'm learning about robotics frameworks"
+                  sessionId: "session-123"
+              withTextSelection:
+                summary: Message with text selection context
+                value:
+                  message: "Explain this concept further"
+                  context: "ROS2 (Robot Operating System 2) is a flexible framework for writing robot applications..."
+                  sessionId: "session-456"
+      responses:
+        '200':
+          description: Successful response from the chatbot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+              examples:
+                basicResponse:
+                  summary: Basic response example
+                  value:
+                    id: "msg-789"
+                    response: "ROS2 is a flexible framework for writing robot applications..."
+                    timestamp: "2025-12-14T10:30:00Z"
+                    contextUsed: true
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/personalize:
+    post:
+      summary: Personalize chapter content
+      description: Request personalized version of chapter content based on user preferences
+      operationId: personalizeContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalizeRequest'
+      responses:
+        '200':
+          description: Personalized content response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizeResponse'
+        '401':
+          description: Unauthorized - user not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/translate:
+    post:
+      summary: Translate chapter content to Urdu
+      description: Request Urdu translation of chapter content
+      operationId: translateContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslateRequest'
+      responses:
+        '200':
+          description: Translated content response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslateResponse'
+        '401':
+          description: Unauthorized - user not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/progress/{chapterId}:
+    get:
+      summary: Get user progress for a chapter
+      description: Retrieve the user's progress information for a specific chapter
+      operationId: getChapterProgress
+      parameters:
+        - name: chapterId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the chapter
+      responses:
+        '200':
+          description: Chapter progress information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChapterProgressResponse'
+        '401':
+          description: Unauthorized - user not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Chapter not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Update user progress for a chapter
+      description: Update the user's progress information for a specific chapter
+      operationId: updateChapterProgress
+      parameters:
+        - name: chapterId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the chapter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProgressRequest'
+      responses:
+        '200':
+          description: Chapter progress updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChapterProgressResponse'
+        '401':
+          description: Unauthorized - user not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: The user's message to the chatbot
+          example: "What is ROS2?"
+        context:
+          type: string
+          description: Additional context, such as selected text
+          example: "I found this concept confusing in the chapter..."
+        sessionId:
+          type: string
+          description: Session identifier for conversation continuity
+          example: "session-123"
+        userId:
+          type: string
+          description: Optional user identifier for authenticated users
+          example: "user-456"
+
+    ChatResponse:
+      type: object
+      required:
+        - id
+        - response
+        - timestamp
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the response message
+          example: "msg-789"
+        response:
+          type: string
+          description: The chatbot's response to the user
+          example: "ROS2 is a flexible framework for writing robot applications..."
+        timestamp:
+          type: string
+          format: date-time
+          description: When the response was generated
+          example: "2025-12-14T10:30:00Z"
+        contextUsed:
+          type: boolean
+          description: Whether the context was used in generating the response
+          example: true
+        sources:
+          type: array
+          items:
+            type: string
+          description: Sources referenced in the response (for RAG)
+          example: ["/docs/chapter1", "/docs/ros2-intro"]
+
+    PersonalizeRequest:
+      type: object
+      required:
+        - chapterId
+        - userId
+      properties:
+        chapterId:
+          type: string
+          description: The ID of the chapter to personalize
+          example: "chapter-ros2-intro"
+        userId:
+          type: string
+          description: The user's identifier
+          example: "user-456"
+        learningStyle:
+          type: string
+          enum: [visual, auditory, reading, kinesthetic]
+          description: User's preferred learning style
+          example: "visual"
+        preferences:
+          type: object
+          description: Additional personalization preferences
+          additionalProperties: true
+
+    PersonalizeResponse:
+      type: object
+      required:
+        - chapterId
+        - personalizedContent
+      properties:
+        chapterId:
+          type: string
+          description: The ID of the chapter
+          example: "chapter-ros2-intro"
+        personalizedContent:
+          type: string
+          description: The personalized version of the chapter content
+          example: "# Personalized ROS2 Introduction for Visual Learners..."
+        metadata:
+          type: object
+          description: Additional metadata about the personalization
+          properties:
+            processingTime:
+              type: number
+              description: Time taken to process the personalization (in ms)
+              example: 1250
+
+    TranslateRequest:
+      type: object
+      required:
+        - chapterId
+        - userId
+        - targetLanguage
+      properties:
+        chapterId:
+          type: string
+          description: The ID of the chapter to translate
+          example: "chapter-ros2-intro"
+        userId:
+          type: string
+          description: The user's identifier
+          example: "user-456"
+        targetLanguage:
+          type: string
+          description: The target language code (e.g., 'ur' for Urdu)
+          example: "ur"
+        preserveFormat:
+          type: boolean
+          description: Whether to preserve the original formatting
+          default: true
+
+    TranslateResponse:
+      type: object
+      required:
+        - chapterId
+        - translatedContent
+        - targetLanguage
+      properties:
+        chapterId:
+          type: string
+          description: The ID of the chapter
+          example: "chapter-ros2-intro"
+        translatedContent:
+          type: string
+          description: The translated version of the chapter content
+          example: "# Urdu Translation of ROS2 Introduction..."
+        targetLanguage:
+          type: string
+          description: The target language code
+          example: "ur"
+        metadata:
+          type: object
+          description: Additional metadata about the translation
+          properties:
+            processingTime:
+              type: number
+              description: Time taken to process the translation (in ms)
+              example: 2100
+
+    ChapterProgressResponse:
+      type: object
+      required:
+        - userId
+        - chapterId
+        - completionPercentage
+        - timeSpent
+      properties:
+        userId:
+          type: string
+          description: The user's identifier
+          example: "user-456"
+        chapterId:
+          type: string
+          description: The chapter identifier
+          example: "chapter-ros2-intro"
+        completionPercentage:
+          type: number
+          description: Completion percentage (0-100)
+          example: 75
+        timeSpent:
+          type: number
+          description: Time spent on the chapter in seconds
+          example: 1800
+        lastAccessed:
+          type: string
+          format: date-time
+          description: When the chapter was last accessed
+          example: "2025-12-14T09:30:00Z"
+        bookmarks:
+          type: array
+          items:
+            type: number
+          description: Bookmarked positions in the chapter
+          example: [100, 500, 1200]
+
+    UpdateProgressRequest:
+      type: object
+      required:
+        - completionPercentage
+        - timeSpent
+      properties:
+        completionPercentage:
+          type: number
+          description: Completion percentage (0-100)
+          example: 75
+        timeSpent:
+          type: number
+          description: Time spent on the chapter in seconds
+          example: 1800
+        bookmarks:
+          type: array
+          items:
+            type: number
+          description: Bookmarked positions in the chapter
+          example: [100, 500, 1200]
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: "BAD_REQUEST"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Invalid input parameters"
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true
