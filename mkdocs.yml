@@ -1,4 +1,35 @@
 site_name: Humanoid Robotics Book
 theme:
   name: material
-docs_dir: frontend/docs  # Point to the docs directory in frontend
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+docs_dir: frontend/docs   # This tells MkDocs your .md files are in the frontend/docs folder
+use_directory_urls: true
+
+nav:
+  - Home: intro.md
+  - Chapter 1: chapter1.md
+  - "Module 1: ROS2": module-1-ros2/index.md
+  - "Module 2: Simulation": module-2-simulation/index.md
+  - "Module 3: AI Brain": module-3-ai-brain/index.md
+  - "Module 4: VLA Systems": module-4-vla/index.md
+  - "Capstone Project": capstone-project/index.md
