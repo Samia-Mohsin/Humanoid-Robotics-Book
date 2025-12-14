@@ -59,7 +59,11 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to NeuralReader API", "status": "healthy"}
+    return {"message": "Welcome to NeuralReader API", "status": "healthy", "docs": "/api/docs"}
+
+@app.get("/api/")
+async def api_root():
+    return {"message": "Welcome to NeuralReader API", "status": "healthy", "docs": "/api/docs"}
 
 @app.get("/health")
 async def health_check():

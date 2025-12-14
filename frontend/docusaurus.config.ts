@@ -25,7 +25,7 @@ const config: Config = {
   organizationName: 'humanoid-robotics-book', // Usually your GitHub org/user name.
   projectName: 'humanoid-robotics-book.github.io', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -36,9 +36,6 @@ const config: Config = {
     locales: ['en', 'ur'], // Adding Urdu locale for localization support
   },
 
-  // Configuration to handle broken links during build
-  onBrokenLinks: 'ignore',
-  onBrokenMarkdownLinks: 'warn',
 
   presets: [
     [
@@ -81,20 +78,6 @@ const config: Config = {
     // For example, @docusaurus/theme-live-codeblock for live code blocks
   ],
 
-  plugins: [
-    [
-      '@docusaurus/plugin-client-redirects',
-      {
-        fromExtensions: ['html'],
-        redirects: [
-          {
-            from: '/docs',
-            to: '/docs/intro',
-          },
-        ],
-      },
-    ],
-  ],
 
   themeConfig: {
     // Replace with your project's social card

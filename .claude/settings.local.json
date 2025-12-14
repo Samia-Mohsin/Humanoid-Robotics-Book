@@ -146,7 +146,8 @@
       "Bash(dir \"specs\\010-fastapi-backend\\checklists\")",
       "Bash(python create_logo.py)",
       "Bash(uvicorn main:app --host 0.0.0.0 --port 8000 --reload)",
-      "Bash(python -c \"from main import app; print(''Application loaded successfully'')\")"
+      "Bash(python -c \"from main import app; print(''Application loaded successfully'')\")",
+      "Bash(git commit -m \"Add frontend Docusaurus documentation site for NeuralReader AI application\n\n- Implement Docusaurus frontend with chatbot component\n- Add user authentication context and chat interface\n- Include UI components for chat bubbles and user interactions\n- Set up proper configuration for the documentation site\n- Integrate with the backend API endpoints\")"
     ],
     "deny": [],
     "ask": []
