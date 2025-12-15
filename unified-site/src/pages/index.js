@@ -22,7 +22,7 @@ function HomepageHeader() {
           </Link>
           <Link
             className="button button--primary button--lg margin-left--sm"
-            to="/signup">
+            to="/auth/signup">
             Sign Up
           </Link>
         </div>

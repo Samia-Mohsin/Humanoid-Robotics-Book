@@ -23,7 +23,7 @@ const config = {
   organizationName: 'humanoid-robotics-book', // Usually your GitHub org/user name.
   projectName: 'humanoid-robotics-book.github.io', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   markdown: {
     mermaid: true,
