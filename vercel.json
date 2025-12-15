@@ -1,5 +1,14 @@
 {
-  "buildCommand": "pip install -r requirements.txt && python -m mkdocs build",
-  "outputDirectory": "site",
-  "framework": null
+  "version": 2,
+  "builds": [
+    {
+      "src": "unified-site/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "rootDirectory": "unified-site",
+        "buildCommand": "npm run build",
+        "outputDirectory": "build"
+      }
+    }
+  ]
 }
