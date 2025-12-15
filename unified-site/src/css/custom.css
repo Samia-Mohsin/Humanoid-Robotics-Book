@@ -1,100 +1,36 @@
-/** src/css/custom.css **/
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/* You can override the default Docusaurus theme variables here. */
 :root {
-  /* Primary brand colors - Futuristic Blue + Electric Cyan accent */
-  --ifm-color-primary: #0d6efd;           /* Bootstrap-like primary blue - clean & tech */
-  --ifm-color-primary-dark: #0b5ed7;
-  --ifm-color-primary-darker: #0a58ca;
-  --ifm-color-primary-darkest: #084298;
-  --ifm-color-primary-light: #3d8bfd;
-  --ifm-color-primary-lighter: #6ea8fe;
-  --ifm-color-primary-lightest: #9ec5fe;
+  /* Set primary colors - using Docusaurus default */
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
 
-  /* Secondary accent - Electric cyan/teal (for humanoid "energy" feel) */
-  --ifm-color-secondary: #00d4ff;
-  --ifm-color-secondary-dark: #00b7e0;
-  --ifm-color-secondary-contrast: #000000;
+  /* Set font sizes */
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.7;
 
-  /* Backgrounds - Dark metallic for premium robotics look */
-  --ifm-background-color: #0f1117;         /* Very dark blue-gray (almost black) */
-  --ifm-background-surface-color: #161b22; /* Cards, navbar */
-  
-  /* Text */
-  --ifm-font-color-base: #e6edf3;           /* Light gray-blue for excellent contrast */
-  --ifm-heading-color: #ffffff;
-
-  /* Navbar & Footer */
-  --ifm-navbar-background-color: #161b22;
-  --ifm-footer-background-color: #0d1117;
-
-  /* Code blocks - Cyberpunk style */
-  --ifm-code-background: #1e2533;
-  --ifm-code-color: #8dd9ff;
-
-  /* Links */
-  --ifm-link-color: #58a6ff;
-  --ifm-link-hover-color: #00d4ff;
-
-  /* Misc */
-  --ifm-toc-border-color: #30363d;
-  --ifm-hr-border-color: #30363d;
-  --ifm-scrollbar-track-background-color: #161b22;
-  --ifm-scrollbar-thumb-background-color: #30363d;
+  /* Set custom font */
+  --ifm-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
 }
 
-/* Light mode override - clean and professional (optional but recommended) */
+/* Dark theme overrides */
 html[data-theme='dark'] {
-  --ifm-background-color: #0f1117;
-  --ifm-background-surface-color: #161b22;
-  --ifm-navbar-background-color: #161b22;
-  --ifm-footer-background-color: #0d1117;
-}
-
-html[data-theme='light'] {
-  --ifm-color-primary: #0d6efd;
-  --ifm-background-color: #f6f8fa;
-  --ifm-background-surface-color: #ffffff;
-  --ifm-heading-color: #1c1e21;
-  --ifm-font-color-base: #2e3338;
-  --ifm-link-color: #0d6efd;
-}
-
-/* Optional: Add subtle gradient hero or navbar */
-.navbar {
-  background: linear-gradient(90deg, #0d1117 0%, #161b22 100%);
-  box-shadow: 0 2px 10px rgba(0, 212, 255, 0.15);
-}
-
-.hero {
-  background: linear-gradient(135deg, #0f1117 0%, #1a1f2e 100%);
-}
-
-/* Make active menu item glow a bit */
-.menu__link--active {
-  color: #00d4ff !important;
-  font-weight: 600;
-}
-
-
-
-
-
-
-/* src/css/custom.css - add these rules */
-
-.navbar__logo img {
-  height: 48px !important;   /* Adjust higher/lower as needed (40-60px looks great) */
-  width: auto;
-  border-radius: 8px;        /* Slight round for modern look */
-  padding: 4px;              /* Optional breathing room */
-}
-
-@media (max-width: 996px) {
-  .navbar__logo img {
-    height: 40px !important; /* Smaller on mobile */
-  }
-}
-
-/* Optional: Increase navbar height for better logo presence */
-:root {
-  --ifm-navbar-height: 70px;
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
 }

@@ -70,11 +70,16 @@ const config = {
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
+      prism: {
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
+        additionalLanguages: ['python', 'bash', 'json', 'yaml', 'docker', 'powershell'],
+      },
       navbar: {
         title: 'Physical AI & Humanoid Robotics',
         logo: {
           alt: 'Physical AI & Humanoid Robotics Logo',
-          src: 'img/logo.svg',
+          src: 'img/logo.png',
         },
         items: [
           {
@@ -158,7 +163,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ['python', 'bash', 'json', 'yaml', 'docker', 'powershell'],
+        additionalLanguages: ['python', 'bash', 'json', 'yaml', 'docker', 'powershell', 'robotframework'],
       },
       algolia: {
         // The application ID provided by Algolia
