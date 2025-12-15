@@ -13,15 +13,13 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://humanoid-robotics-book.github.io',
+  url: 'https://samia-mohsin.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/AI-Textbook/',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'humanoid-robotics-book', // Usually your GitHub org/user name.
-  projectName: 'humanoid-robotics-book.github.io', // Usually your repo name.
+  // GitHub pages deployment config (for reference only if needed later)
+  organizationName: 'Samia-Mohsin', // Usually your GitHub org/user name.
+  projectName: 'AI-Textbook', // Usually your repo name.
 
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
@@ -172,14 +170,6 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
         additionalLanguages: ['python', 'bash', 'json', 'yaml', 'docker', 'powershell'],
-      },
-      algolia: {
-        // The application ID provided by Algolia
-        appId: 'YOUR_ALGOLIA_APP_ID',
-        // Public API key: it is safe to commit it
-        apiKey: 'YOUR_ALGOLIA_API_KEY',
-        indexName: 'humanoid-robotics-book',
-        contextualSearch: true,
       },
     }),
 };

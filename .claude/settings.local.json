@@ -187,7 +187,8 @@
       "Bash(cat unified-site/docs/module-1-ros2/index.md)",
       "Bash(dir \"C:\\Users\\samia\\Desktop\\Hackathon-Project1\\Humanoid-Robotics-Book\\unified-site\")",
       "Bash(findstr -i \"vercel\\|build\\|config\")",
-      "Bash(findstr vercel)"
+      "Bash(findstr vercel)",
+      "Bash(npx docusaurus start --port 3011)"
     ],
     "deny": [],
     "ask": []
