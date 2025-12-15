@@ -2,46 +2,74 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Physical AI & Humanoid Robotics
 
-Let's discover **Docusaurus in less than 5 minutes**.
+## Course Overview
 
-## Getting Started
+Welcome to the **Physical AI & Humanoid Robotics** educational platform. This course focuses on AI systems in the physical world with embodied intelligence, bridging the gap between the digital brain and the physical body. Students will apply their AI knowledge to control Humanoid Robots in simulated and real-world environments.
 
-Get started by **creating a new site**.
+### Focus and Theme
+- **AI Systems in the Physical World. Embodied Intelligence.**
+- Goal: Bridging the gap between the digital brain and the physical body
+- Students apply their AI knowledge to control Humanoid Robots in simulated and real-world environments
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+### Quarter Overview
+The future of AI extends beyond digital spaces into the physical world. This capstone quarter introduces **Physical AI**—AI systems that function in reality and comprehend physical laws. Students learn to design, simulate, and deploy humanoid robots capable of natural human interactions using ROS 2, Gazebo, and NVIDIA Isaac.
 
-### What you'll need
+## Course Structure
 
-- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+This course is divided into four main modules:
 
-## Generate a new site
+- **Module 1**: The Robotic Nervous System (ROS 2)
+- **Module 2**: The Digital Twin (Gazebo & Unity)
+- **Module 3**: The AI-Robot Brain (NVIDIA Isaac™)
+- **Module 4**: Vision-Language-Action (VLA)
 
-Generate a new Docusaurus site using the **classic template**.
+## Why Physical AI Matters
 
-The classic template will automatically be added to your project after you run the command:
+Humanoid robots are poised to excel in our human-centered world because they share our physical form and can be trained with abundant data from interacting in human environments. This represents a significant transition from AI models confined to digital environments to embodied intelligence that operates in physical space.
 
-```bash
-npm init docusaurus@latest my-website classic
-```
+## Learning Outcomes
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+Upon completion of this course, students will be able to:
 
-The command also installs all necessary dependencies you need to run Docusaurus.
+1. Understand Physical AI principles and embodied intelligence
+2. Master ROS 2 (Robot Operating System) for robotic control
+3. Simulate robots with Gazebo and Unity
+4. Develop with NVIDIA Isaac AI robot platform
+5. Design humanoid robots for natural interactions
+6. Integrate GPT models for conversational robotics
 
-## Start your site
+## Weekly Breakdown
 
-Run the development server:
+The course spans 13 weeks with the following structure:
 
-```bash
-cd my-website
-npm run start
-```
+- **Weeks 1-2**: Introduction to Physical AI
+- **Weeks 3-5**: ROS 2 Fundamentals
+- **Weeks 6-7**: Robot Simulation with Gazebo
+- **Weeks 8-10**: NVIDIA Isaac Platform
+- **Weeks 11-12**: Humanoid Robot Development
+- **Week 13**: Conversational Robotics
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+## Hardware Requirements
 
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+This course is technically demanding, sitting at the intersection of three heavy computational loads: Physics Simulation, Visual Perception, and Generative AI.
 
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+### The "Digital Twin" Workstation (Required per Student)
+- **GPU**: NVIDIA RTX 4070 Ti (12GB VRAM) or higher
+- **CPU**: Intel Core i7 (13th Gen+) or AMD Ryzen 9
+- **RAM**: 64 GB DDR5 (32 GB minimum)
+- **OS**: Ubuntu 22.04 LTS
+
+### The "Physical AI" Edge Kit
+- **Brain**: NVIDIA Jetson Orin Nano (8GB) or Orin NX (16GB)
+- **Eyes**: Intel RealSense D435i or D455
+- **Inner Ear**: USB IMU (BNO055)
+- **Voice Interface**: USB Microphone/Speaker array
+
+## Assessments
+
+- ROS 2 package development project
+- Gazebo simulation implementation
+- Isaac-based perception pipeline
+- Capstone: Simulated humanoid robot with conversational AI

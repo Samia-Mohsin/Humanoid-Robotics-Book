@@ -180,7 +180,11 @@
       "Bash(echo \"# Module 1: ROS2\n\nWelcome to the ROS2 module of the Physical AI & Humanoid Robotics Educational Platform.\n\n## Chapters\n\n- [Chapter 1: Architecture](./chapter-1-architecture)\n- [Chapter 2: rclpy](./chapter-2-rclpy)\n- [Chapter 3: Packages](./chapter-3-packages)\n- [Chapter 4: URDF](./chapter-4-urdf)\n- [Chapter 5: Control Loops](./chapter-5-control-loops)\n- [Chapter 6: Jetson Deployment](./chapter-6-jetson-deployment)\n\")",
       "Bash(git add unified-site/docs/ unified-site/static/img/)",
       "Bash(git add unified-site/src/pages/auth/signin.jsx unified-site/src/pages/auth/signup.jsx)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfix: Resolve context usage in auth pages during server-side rendering\n\n- Update signin and signup pages to safely handle useAuth hook during SSR\n- Replace useNavigate with safe navigation that works during build and runtime\n- Add try/catch blocks for safe context access in auth pages\n- Provide fallback navigation behavior for static site generation\n\nThis resolves the remaining build errors where Docusaurus was trying to statically \nrender auth pages that used React contexts before they were available.\nEOF\n)\")"
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix: Resolve context usage in auth pages during server-side rendering\n\n- Update signin and signup pages to safely handle useAuth hook during SSR\n- Replace useNavigate with safe navigation that works during build and runtime\n- Add try/catch blocks for safe context access in auth pages\n- Provide fallback navigation behavior for static site generation\n\nThis resolves the remaining build errors where Docusaurus was trying to statically \nrender auth pages that used React contexts before they were available.\nEOF\n)\")",
+      "Bash(git remote add textbook https://github.com/Samia-Mohsin/AI-Textbook.git)",
+      "Bash(git push textbook main)",
+      "Bash(cat unified-site/docs/intro.md)",
+      "Bash(cat unified-site/docs/module-1-ros2/index.md)"
     ],
     "deny": [],
     "ask": []
