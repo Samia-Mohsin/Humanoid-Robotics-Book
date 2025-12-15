@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const SignupPage = () => {
@@ -16,8 +15,24 @@ const SignupPage = () => {
   });
 
   const [selectedLanguages, setSelectedLanguages] = useState([]);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+
+  // Safely get login function from context, defaulting to a mock function if context is not available
+  let login;
+  try {
+    const auth = useAuth();
+    login = auth?.login || (() => {});
+  } catch {
+    login = () => {};
+  }
+
+  // For Docusaurus, we'll use a mock navigation during build, real navigation during runtime
+  const navigate = (path) => {
+    if (typeof window !== 'undefined') {
+      // In browser environment, we can use navigation
+      window.location.hash = path;
+    }
+    // During build, navigation is a no-op
+  };
 
   const programmingOptions = ['Python', 'C++', 'ROS', 'JavaScript', 'Rust', 'Other'];
 
