@@ -18,8 +18,8 @@ This plan covers the implementation of a comprehensive educational platform for 
 - **Backend**: FastAPI with OpenAI integration, Neon Postgres for user data, and Qdrant Cloud for vector storage
 - **Deployment**: GitHub Pages for frontend, Vercel serverless for backend
 - **Databases**: Neon Serverless Postgres and Qdrant Cloud Free Tier
-- **Target Site**:https://Hackathon-Project1\Humanoid-Robotics-Book
-- **SiteMap URL**:                                         
+- **Target Site**:https://humanoid-robotics-book-xi.vercel.app/
+- **SiteMap URL**:https://humanoid-robotics-book-xi.vercel.app/sitemap.xml                                      
 
 
 ## Constitution Check

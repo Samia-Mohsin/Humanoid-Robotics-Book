@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: Content Personalization API
+  description: API for content personalization based on user preferences
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Development server
+  - url: https://api.example.com/v1
+    description: Production server
+paths:
+  /content/personalize:
+    post:
+      summary: Personalize content for user
+      description: Adapt content based on user's preferences and background
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalizationRequest'
+      responses:
+        '200':
+          description: Personalized content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizationResponse'
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /content/chapters:
+    get:
+      summary: Get available chapters
+      description: Retrieve list of available chapters/modules in the book
+      responses:
+        '200':
+          description: List of available chapters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chapter'
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /content/chapter/{chapter_id}:
+    get:
+      summary: Get chapter content
+      description: Retrieve content for a specific chapter, potentially personalized
+      parameters:
+        - name: chapter_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the chapter to retrieve
+      responses:
+        '200':
+          description: Chapter content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChapterContent'
+        '404':
+          description: Chapter not found
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    PersonalizationRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          description: Original content to personalize
+          example: "This advanced topic requires knowledge of linear algebra and calculus."
+        context:
+          type: object
+          description: User preferences and background information
+          properties:
+            experience_level:
+              type: string
+              enum: [beginner, intermediate, advanced]
+              example: "beginner"
+            programming_languages:
+              type: array
+              items:
+                type: string
+              example: ["Python", "C++"]
+            ai_ml_experience:
+              type: string
+              example: "intermediate"
+            hardware_experience:
+              type: string
+              example: "beginner"
+            learning_goals:
+              type: string
+              example: "Learn robotics control systems"
+            preferred_topics:
+              type: array
+              items:
+                type: string
+              example: ["AI", "Control Systems"]
+    PersonalizationResponse:
+      type: object
+      required:
+        - personalized_content
+      properties:
+        personalized_content:
+          type: string
+          description: The personalized content
+          example: "This topic introduces basic concepts of robotics with practical examples using Python."
+        modifications_applied:
+          type: array
+          description: List of modifications applied to the content
+          items:
+            type: string
+          example: ["simplified_explanations", "added_python_examples"]
+        confidence:
+          type: number
+          description: Confidence score of the personalization (0-1)
+          example: 0.85
+    Chapter:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique chapter identifier
+        title:
+          type: string
+          description: Chapter title
+        module:
+          type: string
+          description: Module this chapter belongs to
+        order:
+          type: integer
+          description: Order of chapter within module
+        estimated_reading_time:
+          type: integer
+          description: Estimated reading time in minutes
+    ChapterContent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Chapter identifier
+        title:
+          type: string
+          description: Chapter title
+        content:
+          type: string
+          description: Chapter content in Markdown format
+        personalized:
+          type: boolean
+          description: Whether content has been personalized
+        metadata:
+          type: object
+          description: Additional metadata about the chapter
+          properties:
+            estimated_reading_time:
+              type: integer
+            difficulty:
+              type: string
+              enum: [beginner, intermediate, advanced]
+            prerequisites:
+              type: array
+              items:
+                type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

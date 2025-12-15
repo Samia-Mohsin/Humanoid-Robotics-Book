@@ -1,0 +1,17 @@
+# Note: This is for documentation purposes
+# Frontend dependencies are managed via package.json
+# See package.json for the actual frontend dependencies
+
+# The backend requirements are in unified-site/backend/requirements.txt
+# This file exists to clarify the distinction between frontend and backend dependencies
+
+Frontend Dependencies (managed via package.json):
+- @docusaurus/core
+- @docusaurus/preset-classic
+- @docusaurus/module-type-aliases
+- @docusaurus/types
+- react
+- react-dom
+- prism-react-renderer
+
+For the complete list, see package.json

@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  title: Chat API
+  description: API for chatbot functionality with text selection context
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Development server
+  - url: https://api.example.com/v1
+    description: Production server
+paths:
+  /chat:
+    post:
+      summary: Send a message to the chatbot
+      description: Send a message to the AI chatbot with optional selected text context
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Successful response from the chatbot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /chat/sessions:
+    get:
+      summary: Get user's chat sessions
+      description: Retrieve a list of the user's previous chat sessions
+      responses:
+        '200':
+          description: List of chat sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatSession'
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: The user's message to the chatbot
+          example: "Explain ROS2 topics and services"
+        selectedText:
+          type: string
+          description: Text that was selected when the message was sent
+          example: "ROS2 topics provide asynchronous communication between nodes."
+        userId:
+          type: string
+          description: User identifier (auto-detected from auth token)
+        session_id:
+          type: string
+          description: Session identifier for conversation continuity
+    ChatResponse:
+      type: object
+      required:
+        - response
+        - session_id
+      properties:
+        response:
+          type: string
+          description: The AI-generated response
+          example: "ROS2 topics enable asynchronous communication through publish-subscribe pattern..."
+        session_id:
+          type: string
+          description: Session identifier for conversation continuity
+        context_used:
+          type: array
+          description: Context documents used to generate the response
+          items:
+            type: object
+            properties:
+              content:
+                type: string
+                description: Content of the context document
+              score:
+                type: number
+                description: Relevance score of the context
+              source:
+                type: string
+                description: Source of the context
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the response
+    ChatSession:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique session identifier
+        title:
+          type: string
+          description: Auto-generated title based on first message
+        created_at:
+          type: string
+          format: date-time
+          description: Session creation timestamp
+        message_count:
+          type: integer
+          description: Number of messages in the session
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

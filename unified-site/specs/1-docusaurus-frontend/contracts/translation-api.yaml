@@ -1,0 +1,127 @@
+openapi: 3.0.0
+info:
+  title: Translation API
+  description: API for content translation functionality
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Development server
+  - url: https://api.example.com/v1
+    description: Production server
+paths:
+  /translate:
+    post:
+      summary: Translate text to target language
+      description: Translate text from source language to target language using AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationRequest'
+      responses:
+        '200':
+          description: Successful translation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationResponse'
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /translate/detect:
+    post:
+      summary: Detect language of text
+      description: Detect the language of the provided text
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LanguageDetectionRequest'
+      responses:
+        '200':
+          description: Detected language
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguageDetectionResponse'
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    TranslationRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          description: Text to translate
+          example: "This is a sample text to translate to Urdu."
+        source_lang:
+          type: string
+          description: Source language code (default: en)
+          example: "en"
+          default: "en"
+        target_lang:
+          type: string
+          description: Target language code (default: ur)
+          example: "ur"
+          default: "ur"
+        user_id:
+          type: string
+          description: User identifier (auto-detected from auth token)
+    TranslationResponse:
+      type: object
+      required:
+        - translated_text
+        - source_lang
+        - target_lang
+      properties:
+        translated_text:
+          type: string
+          description: The translated text
+          example: "یہ اردو میں ترجمہ کردہ نمونہ متن ہے۔"
+        source_lang:
+          type: string
+          description: Source language code
+          example: "en"
+        target_lang:
+          type: string
+          description: Target language code
+          example: "ur"
+        confidence:
+          type: number
+          description: Confidence score of the translation (0-1)
+          example: 0.95
+    LanguageDetectionRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          description: Text to detect language for
+          example: "یہ اردو میں لکھا گیا ہے"
+    LanguageDetectionResponse:
+      type: object
+      required:
+        - detected_language
+      properties:
+        detected_language:
+          type: string
+          description: Detected language code
+          example: "ur"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
