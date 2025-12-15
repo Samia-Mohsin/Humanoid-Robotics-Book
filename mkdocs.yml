@@ -1,4 +1,12 @@
-site_name: Humanoid Robotics Book
+# NOTE: This MkDocs configuration is deprecated
+# The project has been migrated to Docusaurus for enhanced functionality
+# including RAG chatbot, personalization, and multilingual support
+#
+# The active site is now in the unified-site/ directory
+# with Docusaurus configuration in unified-site/docusaurus.config.js
+#
+# This file is kept for historical reference only
+site_name: Humanoid Robotics Book (Legacy MkDocs)
 theme:
   name: material
   palette:
