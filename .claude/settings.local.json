@@ -184,7 +184,10 @@
       "Bash(git remote add textbook https://github.com/Samia-Mohsin/AI-Textbook.git)",
       "Bash(git push textbook main)",
       "Bash(cat unified-site/docs/intro.md)",
-      "Bash(cat unified-site/docs/module-1-ros2/index.md)"
+      "Bash(cat unified-site/docs/module-1-ros2/index.md)",
+      "Bash(dir \"C:\\Users\\samia\\Desktop\\Hackathon-Project1\\Humanoid-Robotics-Book\\unified-site\")",
+      "Bash(findstr -i \"vercel\\|build\\|config\")",
+      "Bash(findstr vercel)"
     ],
     "deny": [],
     "ask": []

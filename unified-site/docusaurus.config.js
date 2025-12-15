@@ -25,6 +25,14 @@ const config = {
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    mermaid: true,
+    mdx1Compat: {
+      comments: true,
+      admonitions: true,
+      headingIds: true,
+    },
+  },
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -163,7 +171,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ['python', 'bash', 'json', 'yaml', 'docker', 'powershell', 'robotframework'],
+        additionalLanguages: ['python', 'bash', 'json', 'yaml', 'docker', 'powershell'],
       },
       algolia: {
         // The application ID provided by Algolia
